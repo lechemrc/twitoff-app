@@ -37,3 +37,8 @@ def add_or_update_user(name):
 		raise e
 	else:
 		DB.session.commit()
+
+def update_all_user():
+	"""Update all tweets for all users in the user table"""
+	for user in User.query.all():
+		add_or_update_user(user.name)
