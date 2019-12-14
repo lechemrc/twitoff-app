@@ -1,6 +1,6 @@
 """Prediction of Users based on Tweet embeddings."""
 import numpy as np
-from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import NearestNeighbors
 
 from .models import User
 from .twitter import BASILICA
@@ -26,8 +26,8 @@ def predict_user(user1_name, user2_name, tweet_text):
     tweet_embedding = BASILICA.embed_sentence(tweet_text, model='twitter')
     tweet_embedding = np.array(tweet_embedding).reshape(1, -1)
     user1_neigh_dist, _ = user1_neigh.kneighbors(X=tweet_embedding, n_neighbors=1)
-    user2_neigh_dist, _ = user1_neigh.kneighbors(X=tweet_embedding, n_neighbors=1)
+    user2_neigh_dist, _ = user2_neigh.kneighbors(X=tweet_embedding, n_neighbors=1)
     user1_neigh_dist = user1_neigh_dist[0][0]
     user2_neigh_dist = user2_neigh_dist[0][0]
 
-    return user1_neigh_dist > user2_neigh_dist
+    return user1_neigh_dist < user2_neigh_dist
